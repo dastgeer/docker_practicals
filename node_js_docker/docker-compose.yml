@@ -1,0 +1,16 @@
+version: '3'
+#here we want write below what are all services is going to call in down
+#services means application conatiner specifically in docker /docker ocmpose world
+services:
+  redis-server: 
+    image: 'redis'
+  #redis-server:   # name of conatiner to be used ,can give any name
+  #  image: 'redis' # should be create above conatainer based on image whose name is redis.
+  node-app: # name of application container which we are going to be use.
+    restart: always
+    build : . # this . specify that it has to be build the image and create container using current directory docker file.
+    ports:
+      - "4001:8081" # we can map muiple port to current server ,-(this hypen specify that it is in array) so ports accept array."output port: input port"
+
+
+  
