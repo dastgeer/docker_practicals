@@ -1,0 +1,15 @@
+#install & get proper node base image
+FROM node:16-alpine
+
+# our workdir in image
+WORKDIR /app
+
+#copy file to
+COPY package.json .
+
+RUN npm install 
+
+#copy everything from porject
+COPY . .
+
+CMD ["npm","run","start"]

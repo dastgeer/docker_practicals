@@ -1,0 +1,19 @@
+version: '3'
+services:  # as we know what under service imdeiatly that will indicate that will create new conatiner and it will run like react web, react test
+  react-web: 
+    build:   # when docker-compose run it will come to this line it will look docker file if found then start further processing otherwise it will throw error.
+      context: . #this option specifywhere we want all the files and folders for this image. if we sprcify all file folder form current working directory then use . or otherwise use path if nested folder is there
+      dockerfile: Dockerfile.dev #thisis specifiy the which file is used for docker image build.
+    ports:
+      - '3000:3000'
+    volumes:
+      - /app/node_modules  #it will tell dont map volume of nodemodule form conatiner to local system. and here : is alos not used to map outside to inside
+      - .:/app  #it is used to map using . from current working directory from external system to /app folder to internal conatiner. 
+  react-test:   # this container for test so no port require, because no access of application from browser
+      build:   # when docker-compose run it will come to this line it will look docker file if found then start further processing otherwise it will throw error.
+        context: . #this option specifywhere we want all the files and folders for this image. if we sprcify all file folder form current working directory then use . or otherwise use path if nested folder is there
+        dockerfile: Dockerfile.dev #thisis specifiy the which file is used for docker image build.
+      volumes:
+        - /app/node_modules  #it will tell dont map volume of nodemodule form conatiner to local system. and here : is alos not used to map outside to inside
+        - .:/app  #it is used to map using . from current working directory from external system to /app folder to internal conatiner. 
+      command: ["npm","run","test"]  # this will override the DockerFile.dev cmd to start or execute the cmd
