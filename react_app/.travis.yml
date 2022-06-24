@@ -1,0 +1,10 @@
+sudo: required
+services: 
+  - docker
+
+before_install: 
+  - docker build -t react_app_react-web -f Dockerfile.dev .
+
+# this will run the our created container and run the conatiner and override the server run cmd with test run cmd  along with coverage
+script:
+  - docker run react_app_react-web npm run test -- --coverage
