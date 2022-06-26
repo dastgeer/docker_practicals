@@ -1,0 +1,53 @@
+version: '3'
+services: # this is actually starting pont for dockers images
+  postgres: 
+    image: 'postgres:latest'
+    environment: 
+      - POSTGRES_PASSWORD=postgres_password  #this is to setup the envirnoment variable like host port an etc user name passwork like that,using environmnet
+  redis: 
+    image: 'redis:latest'
+  # 
+  nginx:
+    depends_on:
+      - api_server
+      - react_client
+    restart: always
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./nginx
+    ports:
+      - '3050:80'
+  api_server: 
+    build:
+      context: ./server
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /app/node_modules   #it will skip no need to setup mapping from internal to external changes 
+      - ./server:/app       # any thing need to change in server folder outside container will be map directly and reflected in /app folder of conatiner
+    environment:
+      - REDIS_HOST=redis  # just share the name of service as host name becuae that image running on specific host able to connect
+      - REDIS_PORT=6379
+      - PG_USER=postgres
+      - PG_PASS=postgres_password
+      - PG_HOST=postgres
+      - PG_PORT=5432
+      - PG_DATABASE=postgres
+  worker:
+    build:
+      context: ./worker
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /app/node_modules
+      - ./worker:/app
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+  react_client:
+    build:
+      context: ./react_client
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /app/node_modules
+      - ./react_client:/app
+    environment:
+      - WDS_SOCKET_PORT=0

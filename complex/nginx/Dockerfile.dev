@@ -1,0 +1,6 @@
+# FROM nginx
+# # we are copying the file default conf into specific folder where actaully the file will be present and pciked up by nginx ,specified name
+# #well just because if file will be there then it would be override it.
+# COPY ./default.conf /etc/nginx/conf.d/default.conf
+FROM nginx
+COPY ./default.conf /etc/nginx/conf.d/default.conf

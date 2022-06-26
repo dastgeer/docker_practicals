@@ -8,3 +8,14 @@ before_install:
 # this will run the our created container and run the conatiner and override the server run cmd with test run cmd  along with coverage
 script:
   - docker run react_app_react-web npm run test -- --coverage
+
+#this configuration is to deploy configuration automatically.
+deploy:
+  provider: elasticbeanstalk # provide the name of provide like aws stalkbean , other cloud service provider
+  region: "us-west-2"  # specify region where you are deploying on cloud
+  app: "docker"   # application name which you have given while creating over cloud.
+  env: "Docker-env"   #environment name which we have used in cloud ,there will be.
+  bucket_name: "name of bucket" # name of bucket which we are using to drop the our zp files or folder to copy and run in conatiner in elastic bean.
+  bucket_path: "same as app name"
+  on:
+    branch: master
